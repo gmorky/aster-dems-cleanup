@@ -1,6 +1,6 @@
 # ASTER DEMs Cleanup
 
-This repository contains MATLAB code for processing ASTER digital elevation models (DEMs) to prepare them for geomorphic change computations as described by Maurer et al. (2019). Only individual ASTER scenes downloaded from the METI AIST Data Archive System (MADAS) maintained by the National Institute of Advanced Industrial Science and Technology (AIST) and Geological Survey of Japan (https://gbank.gsj.jp/madas/map/index.html) are compatible as input. Using a user-specified reference DEM as ground-truth, the majority of erroneous elevation pixels (primarily caused by poor image contrast and clouds) are removed. Each ASTER DEM is then spatially aligned to the reference DEM using optimization routines.
+This repository contains MATLAB code for processing ASTER digital elevation models (DEMs) to prepare them for geomorphic change computations as described by Maurer et al. (2019). Only individual ASTER scenes (and associated metadata) downloaded from the METI AIST Data Archive System (MADAS) are compatible as input (https://gbank.gsj.jp/madas/map/index.html). Using a user-specified reference DEM as ground-truth, this code removes the majority of erroneous elevation pixels (primarily caused by poor image contrast and clouds), then spatially aligns each ASTER DEM to the reference DEM using optimization routines.
 
 ## Requirements
 
@@ -8,7 +8,7 @@ This repository contains MATLAB code for processing ASTER digital elevation mode
 
 * MATLAB image processing, mapping, statistics, and optimization toolboxes. Enter `ver` in the MATLAB command window to see if you have them installed.
 
-* The HEXIMAP "shared" [library](https://github.com/gmorky/heximap/tree/master/main/shared)
+* The HEXIMAP "shared" [library](https://github.com/gmorky/heximap/tree/master/main/shared).
 
 ## Tips
 
@@ -18,13 +18,13 @@ This repository contains MATLAB code for processing ASTER digital elevation mode
 
 ## Installation
 
-After downloading the repository, add it to your MATLAB path including all subdirectories as `addpath(genpath('/path/to/asterDemsCleanup'))`. Also add the required HEXIMAP shared library as `addpath('/path/to/heximap/main/shared')`.
+After downloading the repository, add it to your MATLAB path including all subdirectories as `addpath(genpath('/path/to/aster-dems-cleanup'))`. Also add the required HEXIMAP shared library as `addpath('/path/to/heximap/main/shared')`.
 
 ## Usage
 
-*Any external data input must be georeferenced in the WGS84 geographic coordinate system, with elevations specified in meters.* The ASTER data must first be downloaded from [MADAS](https://gbank.gsj.jp/madas/map/index.html). This can be done using the standard search portal on the MADAS website. Alternatively, the javascript file *downloadFromMadas.js* (included in this repository) can be used for more efficient downloading if a large number of scenes are required. Instructions for using the javascript code in a web browser are included in the comments within the *downloadFromMadas.js* file.
+*Any external data input must be georeferenced in the WGS84 geographic coordinate system, with elevations specified in meters.* The ASTER data must first be downloaded from [MADAS](https://gbank.gsj.jp/madas/map/index.html). This can be done using the standard search portal on the MADAS website. Alternatively, the javascript file *downloadFromMadas.js* (included in this repository) can be used for more efficient downloading if a large number of scenes are required. Instructions for using the javascript code in a web browser are included in comments within the *downloadFromMadas.js* file.
 
-This repository includes an example dataset in the Bhutanese Himalayas to illustrate a workflow for computing glacier ice loss trends (using the [geomorphic-change](https://github.com/gmorky/geomorphic-change) repository as the next step). The example dataset contains an ALOS reference DEM (geotiff format), polygons representing glacier boundaries (ESRI shapefile format), and several ASTER scenes.
+This repository includes an example dataset in the Bhutanese Himalayas to illustrate a workflow for computing glacier ice loss trends (using the [geomorphic-change](https://github.com/gmorky/geomorphic-change) repository as the next step). The example dataset contains an ALOS reference DEM (geotiff format), polygons representing glacier extents (ESRI shapefile format), and several ASTER scenes.
 
 The *cleanupAsterDems.m* script demonstrates the general workflow, with inputs for the two primary functions as follows:
 
@@ -32,7 +32,7 @@ The *cleanupAsterDems.m* script demonstrates the general workflow, with inputs f
 
 	* `params.referenceDemFile` (char): Path to the reference DEM geotiff file.
 
-	* `params.unstableTerrainDir` (char): Path to the directory containing shapefile(s) with polygons enclosing terrain known to be unstable through time. In the example dataset, polygons representing approximate glacier boundaries are used.
+	* `params.unstableTerrainDir` (char): Path to the directory containing shapefile(s) with polygons enclosing terrain known to be unstable through time. In the example dataset, polygons representing approximate glacier extents are used.
 
 	* `params.elevationThreshold` (1x1 double): The elevation threshold (absolute difference between ASTER DEMs and the reference DEM) which determines whether any given ASTER DEM pixel is considered erroneous. ASTER DEM pixels with absolute elevation differences greater than this value are removed. Units: meters.
 
